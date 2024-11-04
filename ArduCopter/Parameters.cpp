@@ -27,6 +27,8 @@
 #define DEFAULT_FRAME_CLASS 0
 #endif
 
+extern AP_Int8 ic_guard;
+
 const AP_Param::Info Copter::var_info[] = {
     // @Param: FORMAT_VERSION
     // @DisplayName: Eeprom format version number
@@ -710,6 +712,10 @@ const AP_Param::Info Copter::var_info[] = {
     // @Path: ../libraries/AC_CustomControl/AC_CustomControl.cpp
     GOBJECT(custom_control, "CC", AC_CustomControl),
 #endif
+
+    // @Param: IC_GUARD
+    // @DisplayName: IC Guard
+    { "IC_GUARD", &ic_guard, {def_value : 0}, 0, 256, ic_guard.vtype },
 
     // @Group:
     // @Path: Parameters.cpp

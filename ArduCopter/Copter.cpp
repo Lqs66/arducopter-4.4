@@ -794,4 +794,6 @@ Copter::Copter(void)
 Copter copter;
 AP_Vehicle& vehicle = copter;
 
+AP_Int8 ic_guard;
+
 AP_HAL_MAIN_CALLBACKS(&copter);
