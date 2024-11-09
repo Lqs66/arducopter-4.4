@@ -80,6 +80,13 @@
 #include "version.h"
 #undef FORCE_VERSION_H_INCLUDE
 
+/**
+ * @brief add by lqs66
+ */
+#include <stdio.h>
+#include <time.h>
+#include <stdint.h>
+
 const AP_HAL::HAL& hal = AP_HAL::get_HAL();
 
 #define SCHED_TASK(func, _interval_ticks, _max_time_micros, _prio) SCHED_TASK_CLASS(Copter, &copter, func, _interval_ticks, _max_time_micros, _prio)
@@ -794,6 +801,30 @@ Copter::Copter(void)
 Copter copter;
 AP_Vehicle& vehicle = copter;
 
+/**
+ * @brief add by lqs66
+ */
 AP_Int8 ic_guard;
+void dump_static_vars()
+{
+    if (ic_guard <= 0)
+        return;
+    time_t timestamp;
+    time(&timestamp);
+    char filename[50];
+    snprintf(filename, sizeof(filename), "test_%ld.in", (long)timestamp);
+    FILE* file = fopen(filename, "wb");
+
+    /**
+     * here will be the instrument points
+     */
+
+    fflush(file);
+    fclose(file);
+
+    int8_t tmp = ic_guard.get();
+    ic_guard.set_and_save(tmp - (int8_t)1);
+}
+
 
 AP_HAL_MAIN_CALLBACKS(&copter);
