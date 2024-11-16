@@ -804,7 +804,9 @@ AP_Vehicle& vehicle = copter;
 /**
  * @brief add by lqs66
  */
-AP_Int8 ic_guard;
+AP_Int8 ic_guard __attribute__((used));
+
+__attribute__((used))
 void dump_static_vars()
 {
     if (ic_guard <= 0)
