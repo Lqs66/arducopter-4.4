@@ -574,6 +574,14 @@ def configure(cfg):
     # add in generated flags
     cfg.env.CXXFLAGS += ['-include', 'ap_config.h']
 
+    # llvm ir
+    cfg.env.prepend_value('CFLAGS', ['-flto'])
+    cfg.env.prepend_value('CFLAGS', ['-fno-discard-value-names','-fembed-bitcode'])
+    cfg.env.prepend_value('CXXFLAGS', ['-flto'])
+    cfg.env.prepend_value('CXXFLAGS', ['-fno-discard-value-names','-fembed-bitcode','-fwhole-program-vtables'])
+    cfg.env.prepend_value('LINKFLAGS','-flto')
+    cfg.env.prepend_value('LINKFLAGS','-fuse-ld=ld.lld')
+
     _collect_autoconfig_files(cfg)
 
 def collect_dirs_to_recurse(bld, globs, **kw):
