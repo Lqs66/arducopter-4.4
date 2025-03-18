@@ -427,6 +427,11 @@ def configure(cfg):
     cfg.env.COVERAGE = cfg.options.coverage
     cfg.env.AUTOCONFIG = cfg.options.autoconfig
 
+    # @author: lqs66
+    # disable UAVCAN for SITL
+    if cfg.options.board == 'sitl':
+        cfg.get_board().with_can = False
+
     _set_build_context_variant(cfg.env.BOARD)
     cfg.setenv(cfg.env.BOARD)
 
@@ -574,6 +579,7 @@ def configure(cfg):
     # add in generated flags
     cfg.env.CXXFLAGS += ['-include', 'ap_config.h']
 
+    # @author: lqs66
     # llvm ir
     cfg.env.prepend_value('CFLAGS', ['-flto'])
     cfg.env.prepend_value('CFLAGS', ['-fno-discard-value-names','-fembed-bitcode'])
