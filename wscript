@@ -392,6 +392,11 @@ configuration in order to save typing.
                  default=0,
                  help='zero time on boot in microseconds')
     
+    g.add_option('--enable-llvm-ir',
+        action='store_true',
+        default=False,
+        help='enable LLVM IR generation')
+
 def _collect_autoconfig_files(cfg):
     for m in sys.modules.values():
         paths = []
@@ -427,7 +432,6 @@ def configure(cfg):
     cfg.env.COVERAGE = cfg.options.coverage
     cfg.env.AUTOCONFIG = cfg.options.autoconfig
 
-    # @author: lqs66
     # disable UAVCAN for SITL
     if cfg.options.board == 'sitl':
         cfg.get_board().with_can = False
@@ -579,14 +583,17 @@ def configure(cfg):
     # add in generated flags
     cfg.env.CXXFLAGS += ['-include', 'ap_config.h']
 
-    # @author: lqs66
-    # llvm ir
-    cfg.env.prepend_value('CFLAGS', ['-flto'])
-    cfg.env.prepend_value('CFLAGS', ['-fno-discard-value-names','-fembed-bitcode'])
-    cfg.env.prepend_value('CXXFLAGS', ['-flto'])
-    cfg.env.prepend_value('CXXFLAGS', ['-fno-discard-value-names','-fembed-bitcode','-fwhole-program-vtables'])
-    cfg.env.prepend_value('LINKFLAGS','-flto')
-    cfg.env.prepend_value('LINKFLAGS','-fuse-ld=ld.lld')
+    if cfg.options.enable_llvm_ir:
+        cfg.msg('LLVM IR generation', 'enabled')
+        # 添加LLVM IR相关编译选项
+        cfg.env.prepend_value('CFLAGS', ['-flto'])
+        cfg.env.prepend_value('CFLAGS', ['-fno-discard-value-names','-fembed-bitcode'])
+        cfg.env.prepend_value('CXXFLAGS', ['-flto'])
+        cfg.env.prepend_value('CXXFLAGS', ['-fno-discard-value-names','-fembed-bitcode','-fwhole-program-vtables'])
+        cfg.env.prepend_value('LINKFLAGS','-flto')
+        cfg.env.prepend_value('LINKFLAGS','-fuse-ld=ld.lld')
+    else:
+        cfg.msg('LLVM IR generation', 'disabled', color='YELLOW')
 
     _collect_autoconfig_files(cfg)
 
