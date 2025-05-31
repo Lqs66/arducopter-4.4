@@ -585,7 +585,6 @@ def configure(cfg):
 
     if cfg.options.enable_llvm_ir:
         cfg.msg('LLVM IR generation', 'enabled')
-        # 添加LLVM IR相关编译选项
         cfg.env.prepend_value('CFLAGS', ['-flto'])
         cfg.env.prepend_value('CFLAGS', ['-fno-discard-value-names','-fembed-bitcode'])
         cfg.env.prepend_value('CXXFLAGS', ['-flto'])
